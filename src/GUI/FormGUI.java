@@ -52,7 +52,7 @@ public class FormGUI extends JFrame {
         
         this.setLayout(new BorderLayout());
         this.getContentPane().add(this.getRodape(), BorderLayout.PAGE_END);
-        this.getForm().setForeground(Color.white);
+        this.setForeground(Color.white);
         
         // Cria um JPanel para conter a imagem
         JPanel imagePanel = new JPanel();
@@ -75,16 +75,33 @@ public class FormGUI extends JFrame {
             this.form = new JPanel(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(5, 5, 5, 5);
+            
+            // Creating and setting text color to white for labels and text fields
             this.lblNome = new JLabel("Nome:");
+            this.lblNome.setForeground(Color.WHITE);
             this.txtNome = new JTextField(15);
+            this.txtNome.setForeground(Color.BLACK);
+            
             this.lblCpf = new JLabel("CPF:");
+            this.lblCpf.setForeground(Color.WHITE);
             this.txtCpf = new JTextField(15);
+            this.txtCpf.setForeground(Color.BLACK);
+
             this.lblNumero = new JLabel("Número:");
+            this.lblNumero.setForeground(Color.WHITE);
             this.txtNumero = new JTextField(15);
+            this.txtNumero.setForeground(Color.BLACK);
+      
             this.lblEmail = new JLabel("Email:");
+            this.lblEmail.setForeground(Color.WHITE);
             this.txtEmail = new JTextField(15);
+            this.txtEmail.setForeground(Color.BLACK);
+
             this.lblEndereco = new JLabel("Endereço(CEP):");
+            this.lblEndereco.setForeground(Color.WHITE);
             this.txtEndereco = new JTextField(15);
+            this.txtEndereco.setForeground(Color.BLACK);
+
             
             // Adicionar componentes ao painel com posicionamento
             gbc.anchor = GridBagConstraints.EAST;
@@ -119,12 +136,12 @@ public class FormGUI extends JFrame {
 
             gbc.anchor = GridBagConstraints.EAST;
             gbc.gridx = 0;
-            gbc.gridy = 3; // Moved email label to row 2
+            gbc.gridy = 3; // Moved email label to row 3
             this.form.add(this.lblEmail, gbc);
             
             gbc.anchor = GridBagConstraints.WEST;
             gbc.gridx = 1;
-            gbc.gridy = 3; // Moved email text field to row 2
+            gbc.gridy = 3; // Moved email text field to row 3
             this.form.add(this.txtEmail, gbc);
 
             gbc.anchor = GridBagConstraints.EAST;
@@ -149,7 +166,7 @@ public class FormGUI extends JFrame {
             this.btnCadastrar.setMnemonic(KeyEvent.VK_ENTER);
             this.rodape.add(this.btnLimpar);
             this.rodape.add(this.btnCadastrar);
-            this.rodape.setBackground(Color.GRAY);
+            this.rodape.setBackground(Color.DARK_GRAY);
         }
         return this.rodape;
     }
@@ -168,29 +185,13 @@ public class FormGUI extends JFrame {
     
     private void clickBtnCadastrar(ActionEvent evento) {
         if(this.txtNome.getText().equals("")) {
-            JOptionPane.showMessageDialog(
-                    this.form,
-                    "O campo Nome é obrigatório",
-                    "Dados inválidos",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.form,"O campo Nome é obrigatório","Dados inválidos",JOptionPane.ERROR_MESSAGE);
         } else if(this.txtCpf.getText().equals("")) {
-                JOptionPane.showMessageDialog(
-                        this.form,
-                        "O campo CPF é obrigatório",
-                        "Dados inválidos",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this.form,"O campo CPF é obrigatório","Dados inválidos",JOptionPane.ERROR_MESSAGE);
         } else if(this.txtNumero.getText().equals("")) {
-                JOptionPane.showMessageDialog(
-                        this.form,
-                        "O campo Número é obrigatório",
-                        "Dados inválidos",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this.form,"O campo Número é obrigatório","Dados inválidos",JOptionPane.ERROR_MESSAGE);
         } else if(this.txtEndereco.getText().equals("")) {
-                JOptionPane.showMessageDialog(
-                        this.form,
-                        "O campo Endereço é obrigatório",
-                        "Dados inválidos",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this.form,"O campo Endereço é obrigatório","Dados inválidos",JOptionPane.ERROR_MESSAGE);
         } else {
             Cliente pessoa = new Cliente(this.txtNome.getText(), this.txtCpf.getText(), this.txtNumero.getText(), this.txtEmail.getText(), this.txtEndereco.getText());
             this.pessoaCtrl.add(pessoa);

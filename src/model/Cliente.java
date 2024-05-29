@@ -7,7 +7,7 @@ public class Cliente {
 	private String email;
 	private String endereco;
 	
-	public Cliente(String nome, String cpf, String numero, String Email, String endereco) {
+	public Cliente(String nome, String cpf, String numero, String email, String endereco) {
 		super();
 		this.nome = nome;
 		this.cpf = cpf;

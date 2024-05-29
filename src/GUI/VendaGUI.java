@@ -2,13 +2,12 @@ package GUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import model.Carro;
-import Controller.CarroController;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import model.Carro;
+import Controller.CarroController;
 
 public class VendaGUI extends JFrame {
     private JPanel mainPanel;
@@ -17,20 +16,34 @@ public class VendaGUI extends JFrame {
     private JButton btnComprar;
     private CarroController carroController;
     private JComboBox<Integer> comboCarroId;
+    private JTextField txtNome;
+    private JTextField txtCPF;
+    private JTextField txtNumero;
+    private JTextField txtEmail;
+    private JTextField txtEndereco;
+    
+    // Adicionando ButtonGroup como um campo da classe
+    private ButtonGroup buttonGroup;
 
     public VendaGUI(String nome, String cpf, String numero, String email, String endereco) {
         this.setTitle("Detalhes da Venda");
-        this.setSize(1357, 600);
+        this.setSize(959, 680);
         this.setLocationRelativeTo(null);
-        this.setResizable(true);
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        carroController = new CarroController();  // Initialize CarroController
+        carroController = new CarroController();
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(getUsuarioPanel(nome, cpf, numero, email, endereco), BorderLayout.WEST);
-        mainPanel.add(getPatioCarros(), BorderLayout.CENTER);  // Add car panel to main panel
+        mainPanel.add(getPatioCarros(), BorderLayout.CENTER);
         mainPanel.add(getRodape(), BorderLayout.SOUTH);
+
+        // Inicializar campos de texto
+        txtNome = new JTextField(nome);
+        txtCPF = new JTextField(cpf);
+        txtNumero = new JTextField(numero);
+        txtEmail = new JTextField(email);
+        txtEndereco = new JTextField(endereco);
 
         this.add(mainPanel);
         this.setVisible(true);
@@ -38,20 +51,43 @@ public class VendaGUI extends JFrame {
 
     private JPanel getUsuarioPanel(String nome, String cpf, String numero, String email, String endereco) {
         JPanel usuarioPanel = new JPanel(new GridBagLayout());
-        usuarioPanel.setPreferredSize(new Dimension(200, 150)); // Define o tamanho preferido
-        usuarioPanel.setBackground(new Color(246, 115, 7)); // Define a cor de fundo para destaque
+        usuarioPanel.setBackground(new Color(246, 115, 7));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 10, 5, 5);
 
-        usuarioPanel.add(createLabel("Nome: ", nome), gbc);
-        usuarioPanel.add(createLabel("CPF: ", cpf), gbc);
-        usuarioPanel.add(createLabel("Celular: ", numero), gbc);
-        usuarioPanel.add(createLabel("Email: ", email), gbc);
-        usuarioPanel.add(createLabel("Endereço(CEP): ", endereco), gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        usuarioPanel.add(createLabel("Nome: "), gbc);
+
+        gbc.gridy++;
+        usuarioPanel.add(createLabel("CPF: "), gbc);
+
+        gbc.gridy++;
+        usuarioPanel.add(createLabel("Celular: "), gbc);
+
+        gbc.gridy++;
+        usuarioPanel.add(createLabel("Email: "), gbc);
+
+        gbc.gridy++;
+        usuarioPanel.add(createLabel("Endereço (CEP): "), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        usuarioPanel.add(createValueLabel(nome), gbc);
+
+        gbc.gridy++;
+        usuarioPanel.add(createValueLabel(cpf), gbc);
+
+        gbc.gridy++;
+        usuarioPanel.add(createValueLabel(numero), gbc);
+
+        gbc.gridy++;
+        usuarioPanel.add(createValueLabel(email), gbc);
+
+        gbc.gridy++;
+        usuarioPanel.add(createValueLabel(endereco), gbc);
 
         return usuarioPanel;
     }
@@ -59,12 +95,11 @@ public class VendaGUI extends JFrame {
     private JPanel getPatioCarros() {
         JPanel carrosPanel = new JPanel(new BorderLayout());
         List<Carro> carros = carroController.getCarros();
-    
-        // Create table model
+
         DefaultTableModel model = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Torna todas as células não editáveis
+                return false;
             }
         };
         model.addColumn("ID");
@@ -72,63 +107,106 @@ public class VendaGUI extends JFrame {
         model.addColumn("Marca");
         model.addColumn("Ano");
         model.addColumn("Quilometragem");
-        // model.addColumn("Placa");
-        // model.addColumn("Preço");
-    
-        // Fill the table model with car data
+        model.addColumn("Preco");
+
         for (Carro carro : carros) {
             model.addRow(new Object[]{
-                carro.getId(), 
-                carro.getModelo(), 
-                carro.getMarca(), 
-                carro.getAno(), 
-                carro.getQuilometragem(), 
-                // carro.getPlaca(), 
-                // carro.getPreco()
+                    carro.getId(),
+                    carro.getModelo(),
+                    carro.getMarca(),
+                    carro.getAno(),
+                    carro.getQuilometragem(),
+                    carro.getPreco()
             });
         }
-    
-        // Create the table
+
         JTable table = new JTable(model);
-        table.getTableHeader().setReorderingAllowed(false); // Impede que as colunas sejam reordenadas
-        table.setDefaultEditor(Object.class, null); // Impede a edição de células
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setDefaultEditor(Object.class, null);
         JScrollPane scrollPane = new JScrollPane(table);
-        
-        // Adiciona uma margem ao redor do JScrollPane
+
         JPanel scrollPaneContainer = new JPanel(new BorderLayout());
-        scrollPaneContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Adiciona uma margem de 10 pixels em todos os lados
+        scrollPaneContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         scrollPaneContainer.add(scrollPane, BorderLayout.CENTER);
 
         carrosPanel.add(scrollPaneContainer, BorderLayout.CENTER);
 
-    
-        JPanel comboBoxPanel = new JPanel(new GridBagLayout());
-        comboBoxPanel.add(new JLabel("Selecionar Carro:"));
+        JPanel selectionPanel = new JPanel(new BorderLayout());
+
+        JPanel comboBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        comboBoxPanel.add(new JLabel("Selecionar Carro:   "));
         comboBoxPanel.add(getComboBox());
-    
-        JPanel container = new JPanel(new BorderLayout());
-        container.add(comboBoxPanel, BorderLayout.SOUTH);
-        carrosPanel.add(container, BorderLayout.SOUTH);
-    
+
+        JPanel radioPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        radioPanel.add(new JLabel("Forma de pagamento:   "));
+        radioPanel.add(getFormaPagamento());
+
+        selectionPanel.add(comboBoxPanel, BorderLayout.NORTH);
+        selectionPanel.add(radioPanel, BorderLayout.SOUTH);
+
+        carrosPanel.add(selectionPanel, BorderLayout.SOUTH);
+
         return carrosPanel;
+    }
+
+    private JPanel getFormaPagamento() {
+        JPanel radioPanel = new JPanel(new GridLayout(1, 3));
+    
+        JRadioButton vistaDinheiro = new JRadioButton("À vista (dinheiro)");
+        JRadioButton vistaCartao = new JRadioButton("À vista (cartão)");
+        JRadioButton cartaoCredito = new JRadioButton("Cartão de crédito");
+    
+        // Definindo os ActionCommand como valores inteiros
+        vistaDinheiro.setActionCommand("1");
+        vistaCartao.setActionCommand("2");
+        cartaoCredito.setActionCommand("3");
+    
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(vistaDinheiro);
+        buttonGroup.add(vistaCartao);
+        buttonGroup.add(cartaoCredito);
+    
+        radioPanel.add(vistaDinheiro);
+        radioPanel.add(vistaCartao);
+        radioPanel.add(cartaoCredito);
+    
+        return radioPanel;
     }
     
 
+    // Método para obter a forma de pagamento selecionada como um inteiro
+    private int getSelectedFormaPagamento() {
+        if (buttonGroup.getSelection() != null) {
+            return Integer.parseInt(buttonGroup.getSelection().getActionCommand());
+        }
+        return -1; // ou outra indicação de que nada foi selecionado
+    }
+
+
     private JComboBox<Integer> getComboBox() {
         comboCarroId = new JComboBox<>();
+        comboCarroId.addItem(null);
         List<Carro> carros = carroController.getCarros();
         for (Carro carro : carros) {
             comboCarroId.addItem(carro.getId());
         }
-        comboCarroId.setPreferredSize(new Dimension(200, 30));  // Set preferred size for combo box
+        comboCarroId.setPreferredSize(new Dimension(50, 30));
         return comboCarroId;
     }
 
-    private JLabel createLabel(String labelText, String valueText) {
-        String formattedText = String.format("<html><body style='font-family: Arial; font-size: 14px;'><b>%s</b> %s</body></html>", labelText, valueText);
-        JLabel label = new JLabel(formattedText);
-        label.setFont(new Font("ARIAL", Font.PLAIN, 14));
+    private JLabel createLabel(String labelText) {
+        JLabel label = new JLabel(labelText);
+        label.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
         label.setForeground(Color.WHITE);
+        label.setHorizontalAlignment(SwingConstants.LEFT);
+        return label;
+    }
+
+    private JLabel createValueLabel(String valueText) {
+        JLabel label = new JLabel(valueText);
+        label.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        label.setForeground(Color.WHITE);
+        label.setHorizontalAlignment(SwingConstants.LEFT);
         return label;
     }
 
@@ -143,7 +221,6 @@ public class VendaGUI extends JFrame {
             this.rodape.add(this.btnComprar);
             this.rodape.setBackground(Color.GRAY);
 
-            // Adicionar eventos
             this.btnCancelar.addActionListener(this::clickBtnCancelar);
             this.btnComprar.addActionListener(this::clickBtnComprar);
         }
@@ -154,14 +231,36 @@ public class VendaGUI extends JFrame {
         dispose();
     }
 
-    private void clickBtnComprar(ActionEvent evento) {
-        // Aqui você pode definir a lógica que será executada quando o botão "Comprar" for clicado.
-        // JOptionPane.showMessageDialog(this, "Compra realizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+    private void clickBtnComprar(ActionEvent event) {
+        String nome = txtNome.getText();
+        String cpf = txtCPF.getText();
+        String numero = txtNumero.getText();
+        String email = txtEmail.getText();
+        String endereco = txtEndereco.getText();
+    
+        Integer carroId = (Integer) comboCarroId.getSelectedItem();
+    
+        if (carroId == null) {
+            JOptionPane.showMessageDialog(this, "Selecione um Carro para a Compra", "Dados inválidos", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+    
+        int formaPagamento = getSelectedFormaPagamento();
+    
+        if (formaPagamento == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione a forma de pagamento!", "Dados inválidos", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        } else {
+
+        }
+    
+        // Criar um objeto ReciboGUI com os valores preenchidos
+        new ReciboGUI(nome, cpf, numero, email, endereco, carroId, formaPagamento);
+        // Fechar a janela VendaGUI
         dispose();
     }
 
     public static void main(String[] args) {
-        // Criar e exibir a janela VendaGUI com alguns dados de exemplo
-        new VendaGUI("João Silva", "123.456.789-00", "987654321", "receba@gmail.com", "Rua Exemplo, 123");
+        new VendaGUI("Vinícius Vieira de Lima", "123.456.789-00", "987654321", "vieira.lma10@gmail.com", "51059790");
     }
 }
