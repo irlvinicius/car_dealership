@@ -1,6 +1,7 @@
 package model;
 
 public class Carro {
+    private int Id;
     private String marca;
     private String modelo;
     private int ano;
@@ -9,7 +10,8 @@ public class Carro {
     private String placa;
     private Double preco;
 
-    public Carro(String marca, String modelo, int ano, int quilometragem, String categoria, String placa, Double preco) {
+    public Carro(int Id, String marca, String modelo, int ano, int quilometragem, String categoria, String placa, Double preco) {
+        this.Id = Id;
         this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;
@@ -19,8 +21,40 @@ public class Carro {
         this.preco = preco;
     }
 
+    // Getters
+        public int getId() {
+        return Id;
+    }
+    public String getMarca() {
+        return marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public int getQuilometragem() {
+        return quilometragem;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public Double getPreco() {
+        return preco;
+    }
+
     @Override
     public String toString() {
-        return marca + " " + modelo + " (" + ano + ") - " + quilometragem + "km - " + categoria + " - Placa: " + placa + " - Preço: R$" + preco;
+        return Id + " " + marca + " " + modelo + " (" + ano + ") - " + quilometragem + "km - " + categoria + " - Placa: " + placa;
     }
 }
