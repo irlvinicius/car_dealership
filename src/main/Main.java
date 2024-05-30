@@ -18,11 +18,6 @@ public class Main {
 			public void run() {
 				FormGUI frame = new FormGUI(pessoaCtrl);
 				frame.setVisible(true);	
-	
-
-
-				
-				
 			}
 		});
 	}
