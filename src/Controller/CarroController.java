@@ -55,6 +55,15 @@ public class CarroController {
         return carros;
     }
 
+    public Carro getCarroById(int id) {
+        for (Carro carro : carros) {
+            if (carro.getId() == id) {
+                return carro;
+            }
+        }
+        return null; // Retorna null se o carro com o ID fornecido não for encontrado
+    }
+
 
     public static void main(String[] args) {
         CarroController automovel = new CarroController();

@@ -31,6 +31,7 @@ public class VendaGUI extends JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         carroController = new CarroController();
 
         mainPanel = new JPanel(new BorderLayout());
@@ -238,26 +239,27 @@ public class VendaGUI extends JFrame {
         String email = txtEmail.getText();
         String endereco = txtEndereco.getText();
     
-        Integer carroId = (Integer) comboCarroId.getSelectedItem();
-    
-        if (carroId == null) {
+        // Obter o ID do carro selecionado
+        int selectedCarId = (Integer) comboCarroId.getSelectedItem();
+        Carro selectedCar = carroController.getCarroById(selectedCarId);
+        
+        int formaPagamento = getSelectedFormaPagamento();
+
+        if (selectedCar == null) {
             JOptionPane.showMessageDialog(this, "Selecione um Carro para a Compra", "Dados inválidos", JOptionPane.INFORMATION_MESSAGE);
             return;
-        }
-    
-        int formaPagamento = getSelectedFormaPagamento();
-    
-        if (formaPagamento == -1) {
+        } else if (formaPagamento == -1) {
             JOptionPane.showMessageDialog(this, "Selecione a forma de pagamento!", "Dados inválidos", JOptionPane.INFORMATION_MESSAGE);
             return;
         } else {
-
+            // Criar um objeto ReciboGUI com os valores preenchidos
+            ReciboGUI reciboGUI = new ReciboGUI(nome, cpf, numero, email, endereco, selectedCar, formaPagamento);
+            reciboGUI.setVisible(true);
+            // Fechar a janela VendaGUI
+            dispose();
         }
     
-        // Criar um objeto ReciboGUI com os valores preenchidos
-        new ReciboGUI(nome, cpf, numero, email, endereco, carroId, formaPagamento);
-        // Fechar a janela VendaGUI
-        dispose();
+        
     }
 
     public static void main(String[] args) {
