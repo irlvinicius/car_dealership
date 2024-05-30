@@ -2,7 +2,6 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-
 import model.Carro;
 
 public class ReciboGUI extends JFrame {
@@ -11,24 +10,37 @@ public class ReciboGUI extends JFrame {
     private JLabel lblNumero;
     private JLabel lblEmail;
     private JLabel lblEndereco;
-    private JLabel lblCarro;
+    private JLabel lblCarroModelo;
+    private JLabel lblCarroMarca;
+    private JLabel lblCarroAno;
+    private JLabel lblCarroQuilometragem;
+    private JLabel lblCarroCategoria;
+    private JLabel lblCarroPlaca;
+    private JLabel lblTotalPago;
     private JLabel lblFormaPagamento;
+    private JLabel lblMensagem;
 
     public ReciboGUI(String nome, String cpf, String numero, String email, String endereco, Carro selectedCar, int formaPagamento) {
         setTitle("Recibo da Compra");
-        setSize(600, 300); // Increased width to accommodate side by side layout
+        setSize(800, 350); // Aumentou a altura para acomodar a mensagem de sucesso
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        JPanel panel = new GradientPanel();
+        panel.setLayout(new GridLayout(2, 1)); 
 
-        // Add user information labels
-        JPanel userInfoPanel = new JPanel(new GridLayout(0, 1));
+        JPanel userInfoPanel = new JPanel(new GridLayout(0, 1)); 
+        userInfoPanel.setOpaque(false); 
+        JPanel purchaseInfoPanel = new JPanel(new GridLayout(0, 1)); 
+        purchaseInfoPanel.setOpaque(false); 
+
+        // Adiciona a mensagem de sucesso
+        lblMensagem = new JLabel("Compra realizada com sucesso!");
+        lblMensagem.setFont(new Font(lblMensagem.getFont().getName(), Font.BOLD, 32)); 
+        lblMensagem.setHorizontalAlignment(SwingConstants.CENTER); 
+        panel.add(lblMensagem);
+
+        // Rótulos de informações do usuário
         userInfoPanel.setBorder(BorderFactory.createTitledBorder("Informações do Usuário"));
         lblNome = new JLabel("Nome: " + nome);
         lblCPF = new JLabel("CPF: " + cpf);
@@ -40,39 +52,62 @@ public class ReciboGUI extends JFrame {
         userInfoPanel.add(lblNumero);
         userInfoPanel.add(lblEmail);
         userInfoPanel.add(lblEndereco);
-        panel.add(userInfoPanel, gbc);
 
-
+        // Rótulos de informações da compra
+        purchaseInfoPanel.setBorder(BorderFactory.createTitledBorder("Informações da Compra"));
+        lblCarroModelo = new JLabel("Modelo: " + (selectedCar != null ? selectedCar.getModelo() : "N/A"));
+        lblCarroMarca = new JLabel("Marca: " + (selectedCar != null ? selectedCar.getMarca() : "N/A"));
+        lblCarroAno = new JLabel("Ano: " + (selectedCar != null ? selectedCar.getAno() : "N/A"));
+        lblCarroQuilometragem = new JLabel("Quilometragem: " + (selectedCar != null ? selectedCar.getQuilometragem() : "N/A"));
+        lblCarroCategoria = new JLabel("Categoria: " + (selectedCar != null ? selectedCar.getCategoria() : "N/A"));
+        lblCarroPlaca = new JLabel("Placa: " + (selectedCar != null ? selectedCar.getPlaca() : "N/A"));
+        lblTotalPago = new JLabel("Total pago: R$" + (selectedCar != null ? selectedCar.getPreco() : "0.00"));
+        lblTotalPago.setFont(new Font(lblTotalPago.getFont().getName(), Font.BOLD, lblTotalPago.getFont().getSize())); 
+        
         String formaPagamentoStr;
         if (formaPagamento == 1) {
-            formaPagamentoStr = "Á vista(Dinheiro)";
+            formaPagamentoStr = "À vista (Dinheiro)";
         } else if (formaPagamento == 2) {
-            formaPagamentoStr = "Á vista(Cartão)";
+            formaPagamentoStr = "À vista (Cartão)";
         } else {
             formaPagamentoStr = "Cartão de Crédito";
         }
+        lblFormaPagamento = new JLabel("Forma de Pagamento: " + formaPagamentoStr);
 
-
-
-        // Add purchase information labels
-        JPanel purchaseInfoPanel = new JPanel(new GridLayout(0, 1));
-        purchaseInfoPanel.setBorder(BorderFactory.createTitledBorder("Informações da Compra"));
-        lblCarro = new JLabel((selectedCar != null ? selectedCar.getModelo() + " " + selectedCar.getMarca() + " " + selectedCar.getAno() + " " + selectedCar.getQuilometragem() + " " + selectedCar.getCategoria() + " " + " " + selectedCar.getPlaca() + " " + selectedCar.getPreco() + " " : "Nenhum carro selecionado"));
-
-  
-        lblFormaPagamento = new JLabel("Forma de Pagamento: " + formaPagamentoStr); // Example label, you can adjust this as needed
-        purchaseInfoPanel.add(lblCarro);
+        // Adiciona os rótulos aos painéis de informações do usuário e da compra
+        purchaseInfoPanel.add(lblCarroModelo);
+        purchaseInfoPanel.add(lblCarroMarca);
+        purchaseInfoPanel.add(lblCarroAno);
+        purchaseInfoPanel.add(lblCarroQuilometragem);
+        purchaseInfoPanel.add(lblCarroCategoria);
+        purchaseInfoPanel.add(lblCarroPlaca);
+        purchaseInfoPanel.add(lblTotalPago);
         purchaseInfoPanel.add(lblFormaPagamento);
-        gbc.gridx = 1;
-        panel.add(purchaseInfoPanel, gbc);
 
+        // Adiciona os painéis de informações do usuário e da compra ao painel principal
+        JPanel infoPanel = new JPanel(new GridLayout(1, 2)); // Painel para informações do usuário e da compra lado a lado
+        infoPanel.setOpaque(false); // Tornar o painel transparente para ver o gradiente
+        infoPanel.add(userInfoPanel);
+        infoPanel.add(purchaseInfoPanel);
+        panel.add(infoPanel);
+
+        // Adiciona o painel principal ao frame
         add(panel);
     }
 
-    public static void main(String[] args) {
-        // Example usage
-        Carro selectedCar = new Carro(1, "Toyota", "Corolla", 2020, 15000, "Sedan", "LMN-0123", 90000.00);
-        ReciboGUI reciboGUI = new ReciboGUI("João", "123.456.789-00", "123456789", "joao@example.com", "Rua Exemplo, 123", selectedCar, 1);
-        reciboGUI.setVisible(true);
+    // Painel personalizado com gradiente
+    class GradientPanel extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            int width = getWidth();
+            int height = getHeight();
+            Color color1 = new Color(246, 115, 7);
+            Color color2 = getBackground(); // Cor padrão do sistema
+            GradientPaint gp = new GradientPaint(0, 0, color1, width, 0, color2);
+            g2d.setPaint(gp);
+            g2d.fillRect(0, 0, width, height);
+        }
     }
 }
